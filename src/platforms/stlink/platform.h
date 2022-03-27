@@ -61,9 +61,8 @@ int usbuart_debug_write(const char *buf, size_t len);
 #define SRST_PIN_V2	GPIO0
 
 #define LED_PORT	GPIOA
-/* Use PC14 for a "dummy" uart led. So we can observere at least with scope*/
-#define LED_PORT_UART	GPIOC
-#define LED_UART	GPIO14
+#define LED_PORT_UART	GPIOA
+#define LED_UART	GPIO9
 
 #define PLATFORM_HAS_TRACESWO	1
 #define NUM_TRACE_PACKETS		(128)		/* This is an 8K buffer */
@@ -105,37 +104,45 @@ int usbuart_debug_write(const char *buf, size_t len);
 #define IRQ_PRI_USB_VBUS	(14 << 4)
 #define IRQ_PRI_SWO_DMA			(0 << 4)
 
-#define USBUSART USART2
-#define USBUSART_CR1 USART2_CR1
-#define USBUSART_DR USART2_DR
-#define USBUSART_IRQ NVIC_USART2_IRQ
-#define USBUSART_CLK RCC_USART2
-#define USBUSART_PORT GPIOA
-#define USBUSART_TX_PIN GPIO2
-#define USBUSART_RX_PIN GPIO3
-#define USBUSART_ISR(x) usart2_isr(x)
+#define USBUSART USART1
+#define USBUSART_CR1 USART1_CR1
+#define USBUSART_DR USART1_DR
+#define USBUSART_IRQ NVIC_USART1_IRQ
+#define USBUSART_CLK RCC_USART1
+#define USBUSART_PORT GPIOB
+#define USBUSART_TX_PIN GPIO6
+#define USBUSART_RX_PIN GPIO7
+#define USBUSART_ISR(x) usart1_isr(x)
 #define USBUSART_DMA_BUS DMA1
 #define USBUSART_DMA_CLK RCC_DMA1
-#define USBUSART_DMA_TX_CHAN DMA_CHANNEL7
-#define USBUSART_DMA_TX_IRQ NVIC_DMA1_CHANNEL7_IRQ
-#define USBUSART_DMA_TX_ISR(x) dma1_channel7_isr(x)
-#define USBUSART_DMA_RX_CHAN DMA_CHANNEL6
-#define USBUSART_DMA_RX_IRQ NVIC_DMA1_CHANNEL6_IRQ
-#define USBUSART_DMA_RX_ISR(x) dma1_channel6_isr(x)
+#define USBUSART_DMA_TX_CHAN DMA_CHANNEL4
+#define USBUSART_DMA_TX_IRQ NVIC_DMA1_CHANNEL4_IRQ
+#define USBUSART_DMA_TX_ISR(x) dma1_channel4_isr(x)
+#define USBUSART_DMA_RX_CHAN DMA_CHANNEL5
+#define USBUSART_DMA_RX_IRQ NVIC_DMA1_CHANNEL5_IRQ
+#define USBUSART_DMA_RX_ISR(x) dma1_channel5_isr(x)
+
+#define TRACE_TIM TIM2
+#define TRACE_TIM_CLK_EN() rcc_periph_clock_enable(RCC_TIM2)
+#define TRACE_IRQ   NVIC_TIM2_IRQ
+#define TRACE_ISR(x)   tim2_isr(x)
+#define TRACE_IC_IN TIM_IC_IN_TI2
+#define TRACE_TRIG_IN TIM_SMCR_TS_IT1FP2
 
 /* On F103, only USART1 is on AHB2 and can reach 4.5 MBaud at 72 MHz.*/
-#define SWO_UART				USART1
-#define SWO_UART_DR				USART1_DR
-#define SWO_UART_CLK			RCC_USART1
+/* USART1 is already used. sp maximum speed is 2.25 MBaud. */
+#define SWO_UART				USART2
+#define SWO_UART_DR				USART2_DR
+#define SWO_UART_CLK			RCC_USART2
 #define SWO_UART_PORT			GPIOA
-#define SWO_UART_RX_PIN			GPIO10
+#define SWO_UART_RX_PIN			GPIO6 // NOTE: Changed from 10
 
 /* This DMA channel is set by the USART in use */
 #define SWO_DMA_BUS				DMA1
 #define SWO_DMA_CLK				RCC_DMA1
-#define SWO_DMA_CHAN			DMA_CHANNEL5
-#define SWO_DMA_IRQ				NVIC_DMA1_CHANNEL5_IRQ
-#define SWO_DMA_ISR(x)			dma1_channel5_isr(x)
+#define SWO_DMA_CHAN			DMA_CHANNEL6
+#define SWO_DMA_IRQ				NVIC_DMA1_CHANNEL6_IRQ
+#define SWO_DMA_ISR(x)			dma1_channel6_isr(x)
 
 extern uint16_t led_idle_run;
 #define LED_IDLE_RUN            led_idle_run

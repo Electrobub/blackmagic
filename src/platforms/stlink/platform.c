@@ -81,6 +81,10 @@ void platform_init(void)
 	if (rev > 1) /* Reconnect USB */
 		gpio_set(GPIOA, GPIO15);
 	cdcacm_init();
+
+    gpio_primary_remap(AFIO_MAPR_SWJ_CFG_FULL_SWJ,
+	                   AFIO_MAPR_USART1_REMAP);
+
 	/* Don't enable UART if we're being debugged. */
 	if (!(SCS_DEMCR & SCS_DEMCR_TRCENA))
 		usbuart_init();
